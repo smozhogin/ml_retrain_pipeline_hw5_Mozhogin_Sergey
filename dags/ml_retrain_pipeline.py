@@ -15,7 +15,6 @@ METRIC_THRESHOLD = float(os.getenv('METRIC_THRESHOLD', '0.9'))
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
-
 def train_model(ti):
     result = subprocess.run(
         [sys.executable, 'src/train.py'],
@@ -31,7 +30,7 @@ def train_model(ti):
 
 def evaluate_model(ti):
     f1_score = ti.xcom_pull(key='metric', task_ids='train_model')
-    print(f'Средневзвешенный F1-score равен: {f1_score}')
+    print(f'Средневзвешенная F1-score равна: {f1_score}')
 
 def deploy_model(ti):
     f1_score = float(ti.xcom_pull(key='metric', task_ids='train_model'))
@@ -41,7 +40,7 @@ def deploy_model(ti):
         if MODEL_PATH.exists():
             MODEL_PATH.unlink()
 
-    print(f'Решение о деплое в прод. F1-score равен: {f1_score}, baseline равен: {METRIC_THRESHOLD}, решение: {deploy_flag}')
+    print(f'Решение о деплое в прод. F1-score равна: {f1_score}, baseline равен: {METRIC_THRESHOLD}, решение: {deploy_flag}')
     return deploy_flag
 
 def notify_telegram(ti):
