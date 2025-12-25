@@ -1,0 +1,14 @@
+{"timestamp":"2025-12-25T16:39:42.296025Z","level":"info","event":"DAG bundles loaded: dags-folder, example_dags","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2025-12-25T16:39:42.299186Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/ml_retrain_pipeline.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-12-25T16:39:42.362931Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/ml_retrain_pipeline.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2025-12-25T16:39:42.363165Z","level":"warning","event":"The `airflow.operators.python.ShortCircuitOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.ShortCircuitOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/ml_retrain_pipeline.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2025-12-25T16:39:42.363323Z","level":"warning","event":"The `airflow.operators.email.EmailOperator` attribute is deprecated. Please use `'airflow.providers.smtp.operators.smtp.EmailOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/ml_retrain_pipeline.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2025-12-25T16:39:42.481278Z","level":"info","event":"Task instance is in running state","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.482635Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.QUEUED","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.483748Z","level":"info","event":"Current task name:evaluate_model","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.485314Z","level":"info","event":"Dag name:ml_retrain_pipeline","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.590035Z","level":"info","event":"Средневзвешенный F1-score равен: 0.9107142857142857","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.591652Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":217}
+{"timestamp":"2025-12-25T16:39:42.668342Z","level":"info","event":"Task instance in success state","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.669207Z","level":"info","event":" Previous state of the Task instance: TaskInstanceState.RUNNING","logger":"task.stdout"}
+{"timestamp":"2025-12-25T16:39:42.669967Z","level":"info","event":"Task operator:<Task(PythonOperator): evaluate_model>","logger":"task.stdout"}

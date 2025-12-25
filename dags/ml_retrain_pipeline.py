@@ -2,6 +2,7 @@ import os
 import subprocess
 import json
 import sys
+import requests
 from pathlib import Path
 from datetime import datetime
 from airflow import DAG
@@ -11,7 +12,9 @@ from airflow.operators.email import EmailOperator
 MODEL_PATH = Path('models/model.pkl')
 MODEL_VERSION = os.getenv('MODEL_VERSION', 'v1.0.0')
 METRIC_THRESHOLD = float(os.getenv('METRIC_THRESHOLD', '0.9'))
-EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS', 'mozhogin.ss@phystech.edu')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+
 
 def train_model(ti):
     result = subprocess.run(
@@ -41,6 +44,17 @@ def deploy_model(ti):
     print(f'Решение о деплое в прод. F1-score равен: {f1_score}, baseline равен: {METRIC_THRESHOLD}, решение: {deploy_flag}')
     return deploy_flag
 
+def notify_telegram(ti):
+    f1_score = ti.xcom_pull(key='metric', task_ids='train_model')
+
+    text = (f'Модель ML выведена в прод. Версия: {MODEL_VERSION}, Средневзвешенная F1-score: {f1_score}, Baseline: {METRIC_THRESHOLD}')
+
+    url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
+    resp = requests.post(url, json={'chat_id': TELEGRAM_CHAT_ID, 'text': text})
+    resp.raise_for_status()
+
+    print('Уведомление отправлено в Telegram')
+
 with DAG(
     'ml_retrain_pipeline',
     start_date=datetime(2025, 12, 25),
@@ -52,11 +66,6 @@ with DAG(
     train = PythonOperator(task_id='train_model', python_callable=train_model)
     evaluate = PythonOperator(task_id='evaluate_model', python_callable=evaluate_model)
     deploy = ShortCircuitOperator(task_id='deploy_model', python_callable=deploy_model)
-    notify = EmailOperator(
-        task_id='notify_success',
-        to=EMAIL_ADDRESS,
-        subject='Переобученная модель ML выведена в прод',
-        html_content=f'Новая модель <b>версии {MODEL_VERSION}</b> успешно выведена в прод Yandex Cloud Serverless Containers'
-    )
+    notify = PythonOperator(task_id='notify_success', python_callable=notify_telegram)
 
     train >> evaluate >> deploy >> notify
