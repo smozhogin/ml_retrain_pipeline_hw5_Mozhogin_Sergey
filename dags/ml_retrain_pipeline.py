@@ -44,7 +44,7 @@ def deploy_model(ti):
 with DAG(
     'ml_retrain_pipeline',
     start_date=datetime(2025, 12, 25),
-    schedule_interval="@daily",
+    schedule="@daily",
     catchup=False,
     tags=['mlops', 'retrain']
 ) as dag:
