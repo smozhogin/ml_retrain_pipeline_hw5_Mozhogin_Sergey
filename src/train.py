@@ -1,5 +1,6 @@
 import os
 import pickle
+import json
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -39,3 +40,7 @@ model_path = os.path.join('models', 'model.pkl')
 
 with open(model_path, 'wb') as f:
     pickle.dump(model, f)
+
+print(json.dumps({
+    'f1_weighted': f1_weighted
+}))
