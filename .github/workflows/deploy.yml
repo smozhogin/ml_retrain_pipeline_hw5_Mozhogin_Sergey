@@ -93,7 +93,8 @@ jobs:
 
             - name: Init Terraform
               if: steps.changes.outputs.api == 'true' || steps.changes.outputs.infra == 'true'
-              run: terraform init
+              working-directory: infra
+              run: terraform init -upgrade
 
             - name: Install jq
               if: steps.changes.outputs.api == 'true' || steps.changes.outputs.infra == 'true'
@@ -103,6 +104,7 @@ jobs:
 
             - name: Import Existing API Container (Terraform)
               if: steps.changes.outputs.api == 'true' || steps.changes.outputs.infra == 'true'
+              working-directory: infra
               run: |
                   set -euo pipefail
 
@@ -128,10 +130,11 @@ jobs:
 
             - name: Apply Terraform
               if: steps.changes.outputs.api == 'true' || steps.changes.outputs.infra == 'true'
+              working-directory: infra
               run: |
-                  cd infra
                   terraform apply -auto-approve                       -var="folder_id=${{ secrets.YC_FOLDER_ID }}"                       -var="service_account_id=${{ secrets.YC_SERVICE_ACCOUNT_ID }}"                       -var="api_image_url=${{ env.REGISTRY }}/${{ env.API_NAME }}:${{ env.TAG }}"
 
             - name: Show API URL
               if: steps.changes.outputs.api == 'true' || steps.changes.outputs.infra == 'true'
+              working-directory: infra
               run: terraform output -raw api_url
